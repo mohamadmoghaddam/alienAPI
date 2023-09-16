@@ -55,7 +55,30 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+        if(empty($user)){
+            return response('invalid user id', 400);
+        }
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'username' => [
+                'required',
+                Rule::unique('users')->ignore($id, 'id')],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($id, 'id')],
+            'password' => 'required|min:8'
+        ]);
+
+        if ($validator->fails())
+        {
+            return response($validator->messages(), 400);
+        }
+        $user->update($data);
+        $userJson = json_encode($data);
+        return response($userJson)
+        ->header('Content-Type', 'application/json');
     }
 
     /**
