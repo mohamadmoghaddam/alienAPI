@@ -43,8 +43,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(string $id)
     {
+        $user = User::find($id);
+        if(empty($user)){
+            return response('invalid user id', 400);
+        }
         $userJson = $user -> toJson();
         return response($userJson)
         ->header('Content-Type', 'application/json');
@@ -84,8 +88,12 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(string $id)
     {
+        $user = User::find($id);
+        if(empty($user)){
+            return response('invalid user id', 400);
+        }
         $userJson = $user->toJson();
         $user->delete();
         return response($userJson)
