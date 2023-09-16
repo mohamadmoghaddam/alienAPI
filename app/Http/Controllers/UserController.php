@@ -45,7 +45,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        $userJson = $user -> toJson();
+        return response($userJson)
+        ->header('Content-Type', 'application/json');
     }
 
     /**
