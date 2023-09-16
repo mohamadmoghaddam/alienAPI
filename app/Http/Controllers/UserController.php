@@ -86,6 +86,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $userJson = $user->toJson();
+        $user->delete();
+        return response($userJson)
+        ->header('Content-Type', 'application/json');
     }
 }
