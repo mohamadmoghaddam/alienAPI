@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +23,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = $request->user();
-            dd($user);
             $token = $user->createToken('bearer');
             return response()->json([
                 'id' => $user['id'],
@@ -36,7 +34,6 @@ class AuthController extends Controller
 
         return response('Invalid Credentials', 401);
     }
-
 
 
 }
