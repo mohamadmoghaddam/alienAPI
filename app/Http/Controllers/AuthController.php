@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -34,6 +35,14 @@ class AuthController extends Controller
 
         return response('Invalid Credentials', 401);
     }
+
+    public function logout()
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        dd($user->tokens()->delete());
+    }
+
 
 
 }
