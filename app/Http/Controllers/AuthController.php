@@ -43,6 +43,22 @@ class AuthController extends Controller
         dd($user->tokens()->delete());
     }
 
+    public function register(Request $request)
+        {
+            $data = $request->all();
+            $validator = Validator::make($data, [
+                'username' => 'required|unique:users',
+                'email' => 'required|unique:users|email',
+                'password' => 'required|min:8'
+            ]);
 
+            if ($validator->fails())
+            {
+                return response($validator->messages(), 400);
+            }
+            User::create($data);
+            return response()->json($data)
+            ->header('Content-Type', 'application/json');
+        }
 
 }
