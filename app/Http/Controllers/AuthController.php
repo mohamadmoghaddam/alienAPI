@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
-    {   $credentials = $request->all();
+    {
+        $credentials = $request->all();
         $validator = Validator::make($credentials, [
             'username' => 'required',
             'password' => 'required'
@@ -21,26 +22,30 @@ class AuthController extends Controller
             return response($validator->messages(), 400);
         }
 
+        $user = User::where('username', '=', $request->username)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response('Invalid Credentials', 401);
+        }
 
-        if (Auth::attempt($credentials)) {
-            $user = $request->user();
-            $token = $user->createToken('bearer');
+        $token = $user->createToken('bearer');
             return response()->json([
                 'id' => $user['id'],
                 'username' => $user['username'],
                 'email' => $user['email'],
                 'token' => $token->plainTextToken])
         ->header('Content-Type', 'application/json');
-        }
-
-        return response('Invalid Credentials', 401);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        /** @var User $user */
-        $user = Auth::user();
-        dd($user->tokens()->delete());
+        $user = User::find($request->id)->first();
+        $user->tokens()->delete();
+        return response()->json([
+            'id' => $user['id'],
+            'username' => $user['username'],
+            'email' => $user['email']
+            ])
+    ->header('Content-Type', 'application/json');
     }
 
     public function register(Request $request)
