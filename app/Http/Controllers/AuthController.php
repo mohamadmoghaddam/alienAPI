@@ -45,7 +45,7 @@ class AuthController extends Controller
             'username' => $user['username'],
             'email' => $user['email']
             ])
-    ->header('Content-Type', 'application/json');
+        ->header('Content-Type', 'application/json');
     }
 
     public function register(Request $request)
@@ -54,7 +54,7 @@ class AuthController extends Controller
             $validator = Validator::make($data, [
                 'username' => 'required|unique:users',
                 'email' => 'required|unique:users|email',
-                'password' => 'required|min:8'
+                'password' => 'required|confirmed|min:8'
             ]);
 
             if ($validator->fails())
