@@ -21,5 +21,5 @@ use Laravel\Sanctum\Sanctum;
 //     return $request->user();
 // });
 
-Route::apiResource('/users', UserController::class)->middleware('auth:sanctum');
+
 
