@@ -35,7 +35,7 @@ class AuthController extends Controller
             ->header('Content-Type', 'application/json');
         }
 
-        return response('Invalid Credentials', 401);
+        return response()->json('Invalid Credentials', 401);
 
     }
 
