@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,5 +22,6 @@ use Laravel\Sanctum\Sanctum;
 //     return $request->user();
 // });
 
+Route::get('/chats', [ChatController::class, 'index']);
 
 
