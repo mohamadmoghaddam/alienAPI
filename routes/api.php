@@ -25,6 +25,6 @@ use Laravel\Sanctum\Sanctum;
 
 Route::get('/chats', [ChatController::class, 'index']);
 
-Route::get('/chats/{chat}', [MessageController::class, 'show'])->missing(function(){
+Route::get('/chats/{chat}/messages', [MessageController::class, 'show'])->missing(function(){
     return response()->json('Chat not found', 404);
 });
