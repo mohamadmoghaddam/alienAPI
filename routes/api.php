@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,4 +25,6 @@ use Laravel\Sanctum\Sanctum;
 
 Route::get('/chats', [ChatController::class, 'index']);
 
-
+Route::get('/chats/{chat}', [MessageController::class, 'show'])->missing(function(){
+    return response()->json('Chat not found', 404);
+});
