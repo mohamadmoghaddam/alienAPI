@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
 {
-    public function show(Chat $chat){
+    public function show(Chat $chat)
+    {
         $messages = $chat->messages()->with(['sender'])->get();
 
         $msgs = [];
@@ -20,7 +22,21 @@ class MessageController extends Controller
             ];
             array_push($msgs, $add);
         }
-        return response()->json($msgs);
+        return response()->json($msgs)
+        ->header('Content-Type', 'application/json');
     }
 
+    public function store(Request $request, Chat $chat)
+    {
+        $user = auth('sanctum')->user();
+        $data = [
+            'content' => $request->content,
+            'sender_id' => $user->id,
+            'chat_id' => $chat->id
+        ];
+        Message::create($data);
+
+        return response()->json($data)
+        ->header('Content-Type', 'application/json');
+    }
 }
