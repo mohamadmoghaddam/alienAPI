@@ -34,8 +34,7 @@ class ChatController extends Controller
             ];
             array_push($pvs, $add);
         }
-        // $privateChats->users[0]->username
-        return response(json_encode($pvs))
+        return response()->json($pvs)
         ->header('Content-Type', 'application/json');
     }
 }
