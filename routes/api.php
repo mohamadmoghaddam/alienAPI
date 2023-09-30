@@ -28,3 +28,12 @@ Route::get('/chats', [ChatController::class, 'index']);
 Route::get('/chats/{chat}/messages', [MessageController::class, 'show'])->missing(function(){
     return response()->json('Chat not found', 404);
 });
+
+Route::post('/chats/{chat}/messages', [MessageController::class, 'store'])->missing(function(){
+    return response()->json('Chat not found', 404);
+})->middleware('auth:sanctum');
+
+Route::delete('/chats/{chat}/messages/{message}', [MessageController::class, 'destroy'])->missing(function(){
+    return response()->json('Chat not found', 404);
+})->middleware('auth:sanctum');
+
