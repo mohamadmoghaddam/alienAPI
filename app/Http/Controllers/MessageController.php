@@ -31,12 +31,26 @@ class MessageController extends Controller
         $user = auth('sanctum')->user();
         $data = [
             'content' => $request->content,
-            'sender_id' => $user->id,
-            'chat_id' => $chat->id
+                'sender_id' => $user->id,
+                'chat_id' => $chat->id
         ];
         Message::create($data);
 
         return response()->json($data)
+        ->header('Content-Type', 'application/json');
+    }
+
+    public function destroy(Chat $chat, Message $message)
+    {
+        $sender = $message->sender()->get()->username;
+        $content = $message->content;
+        $message->delete();
+
+        return response()->json([
+            'message' => $content,
+            'from' => $sender,
+            'in' => $chat->id
+        ])
         ->header('Content-Type', 'application/json');
     }
 }
