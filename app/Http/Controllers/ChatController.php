@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -37,5 +38,14 @@ class ChatController extends Controller
         // $privateChats->users[0]->username
         return response(json_encode($pvs))
         ->header('Content-Type', 'application/json');
+    }
+    public function startPrivateChat(User $user)
+    {
+        $chat = Chat::create(['chat_type' => 'private']);
+        $chat->users()->attach($user->id);
+        $loggedInUser = auth('sanctum')->user();
+        $chat->users()->attach($loggedInUser->id);
+
+        return response()->json(['Private Chat Started:', $loggedInUser->username, $user->username]);
     }
 }
