@@ -37,3 +37,6 @@ Route::delete('/chats/{chat}/messages/{message}', [MessageController::class, 'de
     return response()->json('Chat not found', 404);
 })->middleware('auth:sanctum');
 
+Route::get('/chats/new/{user:username}', [ChatController::class, 'startPrivateChat'])->missing(function(){
+    return response()->json('User not Found', 404);
+});
